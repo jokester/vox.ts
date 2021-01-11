@@ -9,7 +9,7 @@
     "target": "esnext",
     "skipLibCheck": true,
     "typeRoots": [
-      "typings",
+      "src/ref-voxjs/types",
       "node_modules/@types"
     ],
     "lib": [

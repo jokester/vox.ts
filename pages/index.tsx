@@ -1,7 +1,7 @@
 import React from 'react';
 import { isDevBuild } from '../src/config/build-env';
 import { NextPage } from 'next';
-import { ReactDemo } from '../src/react-demo/react-demo';
+import { ReactDemo } from '../src/demo-babylon/react-demo';
 
 const IndexPage: NextPage = (props) => {
   console.log('buildEnv', isDevBuild);
