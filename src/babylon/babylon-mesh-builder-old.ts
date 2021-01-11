@@ -19,7 +19,7 @@ interface ReadonlyVoxelMesh {
  * @param {Scene} scene
  * @param {BabylonDeps} deps
  * @returns {ReadonlyVoxelMesh}
- * @deprecated
+ * @deprecated this introduces unnecessary faces
  */
 export function buildBabylonMeshOld(
   model: VoxTypes.VoxelModel,
@@ -38,7 +38,7 @@ export function buildBabylonMeshOld(
 
   // a lazy map for referenced colors
   const faceColorsMap = new DefaultMap<number, Color4[]>((colorIndex) => {
-    const c = buildBabylonColor(file.palette[colorIndex], Color4);
+    const c = buildBabylonColor(file.palette[colorIndex], deps);
     return [c, c, c, c, c, c];
   });
 

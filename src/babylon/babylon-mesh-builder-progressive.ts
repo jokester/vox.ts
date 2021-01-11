@@ -31,7 +31,7 @@ const Neighbors = [
  * @param {string} meshName
  * @param {Scene} scene
  * @param deps
- * @param {number} maxWorkPeriod
+ * @param batchSize
  * @returns {Generator<BabylonMeshBuildProgress>}
  */
 export function* buildBabylonMeshProgressive(
@@ -149,6 +149,14 @@ interface CustomPolyhedronProps {
   };
 }
 
+/**
+ * @internal
+ * @param {readonly Voxel[]} voxels
+ * @param {VoxelPalette} palette
+ * @param {number} batchSize
+ * @param {BabylonDeps} deps
+ * @returns {Generator<CustomPolyhedronProps & {progress: number}>}
+ */
 function* extractSurfaces(
   voxels: readonly VoxTypes.Voxel[],
   palette: VoxTypes.VoxelPalette,
@@ -166,9 +174,9 @@ function* extractSurfaces(
 
   /** FIXME: we should merge faces when possible */
 
-  for (const x of voxelIndex.keys()) {
-    for (const y of voxelIndex.get(x)!.keys()) {
-      for (const [z, v] of voxelIndex.get(x)!.get(y)!) {
+  for (const [x, xPlane] of voxelIndex.entries()) {
+    for (const [y, xyEdge] of xPlane.entries()) {
+      for (const [z, v] of xyEdge.entries()) {
         /**
          * notation:
          * voxel {x=a, y=b, z=c} corresponds to box {a<=x<a+1, b<=y<b+1, c-1<=z<c+1}
@@ -239,7 +247,7 @@ function* extractSurfaces(
             [x + 1, y + 1, z + 1],
           );
 
-          const color = buildBabylonColor(palette[v.colorIndex], Color4);
+          const color = buildBabylonColor(palette[v.colorIndex], deps);
 
           // 1 face = 2 colored facets
           for (let i = 0; i < numCreatedFaces; i++) {
@@ -252,10 +260,10 @@ function* extractSurfaces(
           const progress = numProcessedVoxels / voxels.length;
           yield {
             progress: numProcessedVoxels / voxels.length,
-            faceColors: faceColors.splice(0, faceColors.length),
+            faceColors: faceColors.slice(),
             custom: {
-              vertex: vertex.splice(0, vertex.length),
-              face: face.splice(0, face.length),
+              vertex: vertex.slice(),
+              face: face.slice(),
             },
           };
         }
