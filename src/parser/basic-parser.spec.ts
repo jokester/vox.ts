@@ -1,4 +1,4 @@
-import { uint32ToColor } from '../parser/basic-parser';
+import { uint32ToColor } from './basic-parser';
 
 describe('basic-parser.ts', () => {
   describe(uint32ToColor, () => {

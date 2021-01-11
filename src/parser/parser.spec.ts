@@ -1,6 +1,6 @@
 import { chrFoxVox, deerVox, monu8Vox } from '../ref-models/ref-models';
 import { RiffLense } from '../util/riff-lense';
-import { basicParser } from '../parser/basic-parser';
+import { basicParser } from './basic-parser';
 
 describe('parser', () => {
   describe('lenses', () => {
