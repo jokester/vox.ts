@@ -1,4 +1,4 @@
-import { chrFoxVox, deerVox, monu8Vox } from './text-assets';
+import { chrFoxVox, deerVox, monu8Vox } from '../ref-models/ref-models';
 import { RiffLense } from '../util/riff-lense';
 import { basicParser } from '../parser/basic-parser';
 

@@ -7772,6 +7772,11 @@ vm-browserify@1.1.2, vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vox.js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vox.js/-/vox.js-1.1.0.tgz#91775efe0cb0a79a38f2b4e46181289656774d57"
+  integrity sha512-ThBODz5kwTaPRwAR3I+u6NVF3CODvSptOPtKfdu06tUod4b+ZFAto6z/XjPdUR+KKI2ki8fEDcNIFqi67oOHOA==
+
 w3c-hr-time@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/w3c-hr-time/-/w3c-hr-time-1.0.2.tgz#0a89cdf5cc15822df9c360543676963e0cc308cd"

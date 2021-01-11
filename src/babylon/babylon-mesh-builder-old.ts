@@ -1,11 +1,10 @@
 import { Scene } from '@babylonjs/core/scene';
 import { Mesh } from '@babylonjs/core/Meshes';
 import { Color4 } from '@babylonjs/core/Maths';
-import { DefaultMap } from '@jokester/ts-commonutil/collection/default-map';
 import * as VoxTypes from '../types/vox-types';
-import { getLogLevelLogger } from '@jokester/ts-commonutil/logging/loglevel-logger';
 import { BabylonDeps } from './babylon-deps';
 import { buildBabylonColor } from './util';
+import { DefaultMap } from '../util/default-map';
 
 interface ReadonlyVoxelMesh {
   findVoxelMesh(x: number, y: number, z: number): null | Mesh;
