@@ -1,10 +1,10 @@
-import { Mesh } from '@babylonjs/core/Meshes';
-import { Scene } from '@babylonjs/core/scene';
-import { Color4, Quaternion } from '@babylonjs/core/Maths';
-import { BabylonDeps } from './babylon-deps';
+import type { Mesh } from '@babylonjs/core/Meshes';
+import type { Scene } from '@babylonjs/core/scene';
+import type { Color4 } from '@babylonjs/core/Maths';
+import type { BabylonDeps } from './babylon-deps';
 import * as VoxTypes from '../types/vox-types';
 import { buildBabylonColor } from './util';
-import { createVoxelIndex } from '../util/create-voxel-index';
+import { createVoxelIndex } from '../parser/create-voxel-index';
 
 export interface BabylonMeshBuildProgress {
   startAt: number;
@@ -42,7 +42,7 @@ export function* buildBabylonMeshProgressive(
   deps: BabylonDeps,
   batchSize = 0,
 ): Generator<BabylonMeshBuildProgress> {
-  const { Mesh, MeshBuilder, Vector3, Color4, Matrix } = deps;
+  const { Mesh, MeshBuilder, Vector3, Matrix, Quaternion } = deps;
 
   // vox (or MagicaVoxel): x-right / y-'deep' / z-top
   // babylon: x-right / z-'deep' / y-top

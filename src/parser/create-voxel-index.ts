@@ -1,5 +1,5 @@
 import * as VoxTypes from '../types/vox-types';
-import { DefaultMap } from './default-map';
+import { DefaultMap } from '../util/default-map';
 
 export function createVoxelIndex(
   voxels: readonly VoxTypes.Voxel[],

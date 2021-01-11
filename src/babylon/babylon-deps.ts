@@ -2,7 +2,7 @@
  * type-only imports from {@code babylonjs/core} that compiles to nothing.
  */
 import type { Mesh, MeshBuilder, TransformNode } from '@babylonjs/core/Meshes';
-import type { Vector3, Color4, Matrix } from '@babylonjs/core/Maths';
+import type { Vector3, Color4, Matrix, Quaternion } from '@babylonjs/core/Maths';
 
 /**
  * all required babylon deps here
@@ -17,4 +17,5 @@ export interface BabylonDeps {
   Color4: typeof Color4;
   Matrix: typeof Matrix;
   TransformNode: typeof TransformNode;
+  Quaternion: typeof Quaternion;
 }
