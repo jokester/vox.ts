@@ -1,14 +1,20 @@
 import React from 'react';
 import { isDevBuild } from '../src/config/build-env';
 import { NextPage } from 'next';
-import { ReactDemo } from '../src/demo-babylon/react-demo';
+import { DefaultMeta } from '../src/demo/components/default-meta';
 
 const IndexPage: NextPage = (props) => {
-  console.log('buildEnv', isDevBuild);
   return (
     <div>
-      <h1>index page</h1>
-      <ReactDemo />
+      <DefaultMeta />
+      <h1>vox.ts demo</h1>
+      <ul>
+        <li>
+          <a className="underscore" href="/demo/babylon">
+            Babylon.js
+          </a>
+        </li>
+      </ul>
     </div>
   );
 };
