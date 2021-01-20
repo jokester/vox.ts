@@ -3,8 +3,6 @@ import type { Engine } from '@babylonjs/core/Engines';
 import { RefObject, useEffect, useState } from 'react';
 import type { babylonAllDeps } from './deps/babylon-deps';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
-import { isDevBuild } from '../../config/build-env';
-import { useMounted } from '../components/hooks/use-mounted';
 
 /**
  * a object to control camera/scene/stuff
@@ -67,6 +65,15 @@ export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean
       effective = false;
     };
   }, [ctx, enabled]);
+}
+
+export function useBabylonDepsPreload() {
+  useEffect(() => {
+    setTimeout(async () => {
+      import('./deps/babylon-deps');
+      import('./deps/babylon-deps-inspector');
+    });
+  }, []);
 }
 
 /**
