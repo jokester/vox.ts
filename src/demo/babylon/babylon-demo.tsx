@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ParsedVoxFile } from '../../types/vox-types';
-import { useBabylonContext } from './init-babylon';
+import { useBabylonContext, useBabylonInspector } from './init-babylon';
 import classNames from 'classnames';
 import { useMounted } from '../components/hooks/use-mounted';
 import { createRefAxes } from './deps/create-ref-axes';
@@ -13,11 +13,16 @@ export const BabylonDemo: React.FC = () => {
   const [model, setModel] = useState<null | ParsedVoxFile>(null);
 
   if (model) {
-    return <BabylonModelRenderer model={model} onReset={() => setModel(null)} />;
+    return (
+      <div className="p-4">
+        <h1 className="mb-2 text-xl">model viewer</h1>
+        <BabylonModelRenderer model={model} onReset={() => setModel(null)} />;
+      </div>
+    );
   } else {
     return (
-      <div>
-        <h1>pick a vox file</h1>
+      <div className="p-4">
+        <h1 className="mb-2 text-xl">pick a vox file</h1>
         <BabylonFilePicker onModelRead={setModel} />
       </div>
     );
@@ -38,7 +43,7 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
 
   const doReadBlob = async (blob: Blob) => {
     const bytes = await binaryConversion.blob.toArrayBuffer(blob);
-    const parsed = basicParser(bytes, true);
+    const parsed = basicParser(bytes);
     if (parsed.models.length === 1) {
       props.onModelRead?.(parsed);
     }
@@ -107,9 +112,20 @@ const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }
       babylonCtx.engine.start();
     }
   }, [babylonCtx, props.model]);
+
+  const [enableInspector, setEnableInspector] = useState(false);
+  useBabylonInspector(babylonCtx, enableInspector);
+
   return (
     <div className={classNames('py-24')}>
       <canvas ref={canvasRef} className={classNames('bg-white mx-auto')} style={{ width: 640, height: 480 }} />
+      <hr />
+      <p className="p-2 space-x-2">
+        <button className="p-2" onClick={() => setEnableInspector(!enableInspector)}>
+          {enableInspector ? 'disable inspector' : 'enable inspector'}
+        </button>
+        <button onClick={props.onReset}>reset</button>
+      </p>
     </div>
   );
 };

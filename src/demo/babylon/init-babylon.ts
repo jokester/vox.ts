@@ -4,6 +4,7 @@ import { RefObject, useEffect, useState } from 'react';
 import type { babylonAllDeps } from './deps/babylon-deps';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { isDevBuild } from '../../config/build-env';
+import { useMounted } from '../components/hooks/use-mounted';
 
 /**
  * a object to control camera/scene/stuff
@@ -39,12 +40,6 @@ export function useBabylonContext(canvasRef: RefObject<HTMLCanvasElement>): null
       if (!effective) return;
       const ctx = initBabylon(maybeCanvas, imported.babylonAllDeps);
       setCtx(ctx);
-
-      if (isDevBuild) {
-        await import('./deps/babylon-deps-inspector');
-        if (!effective) return;
-        await ctx.scene.debugLayer.show();
-      }
     });
 
     return () => {
@@ -53,6 +48,25 @@ export function useBabylonContext(canvasRef: RefObject<HTMLCanvasElement>): null
   }, []);
 
   return ctx;
+}
+
+export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean) {
+  useEffect(() => {
+    let effective = true;
+    setTimeout(async () => {
+      await import('./deps/babylon-deps-inspector');
+      if (effective && ctx) {
+        if (enabled) {
+          await ctx.scene.debugLayer.show();
+        } else {
+          await ctx.scene.debugLayer.hide();
+        }
+      }
+    });
+    return () => {
+      effective = false;
+    };
+  }, [ctx, enabled]);
 }
 
 /**
