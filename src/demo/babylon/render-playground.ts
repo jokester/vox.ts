@@ -1,6 +1,6 @@
 import { BabylonContext } from './init-babylon';
 
-export async function renderPlayground(ctx: BabylonContext) {
+export function renderPlayground(ctx: BabylonContext) {
   const { Color4, MeshBuilder, Vector3 } = ctx.deps;
   const parentMesh = MeshBuilder.CreateBox('box', {
     size: 5,
