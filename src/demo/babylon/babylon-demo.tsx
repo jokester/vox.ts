@@ -46,6 +46,8 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
     const parsed = basicParser(bytes);
     if (parsed.models.length === 1) {
       props.onModelRead?.(parsed);
+    } else {
+      console.error('cannot read model', bytes, parsed);
     }
   };
 
@@ -75,14 +77,31 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
 
   return (
     <div>
-      <input
-        type="file"
-        ref={inputRef}
-        onChange={(ev) => {
-          const file0 = ev.target.files?.item(0);
-          file0 && onFileSelected(file0);
-        }}
-      />
+      <ul>
+        <li>
+          Load file:
+          <input
+            type="file"
+            ref={inputRef}
+            disabled={reading}
+            onChange={(ev) => {
+              const file0 = ev.target.files?.item(0);
+              file0 && onFileSelected(file0);
+            }}
+          />
+        </li>
+        {demoAssets.map((path, i) => (
+          <li key={i}>
+            <button
+              className="border border-white p-1 disabled:opacity-25"
+              disabled={reading}
+              onClick={() => onRequestResource(path)}
+            >
+              load {path}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
@@ -129,3 +148,5 @@ const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }
     </div>
   );
 };
+
+const demoAssets = ['/ref-models/chr_fox.vox', '/ref-models/deer.vox', '/ref-models/monu8.vox'] as const;
