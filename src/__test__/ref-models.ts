@@ -20,7 +20,7 @@ export const monu8Vox = readVox('monu8.vox');
 export const deerVox = readVox('deer.vox');
 
 function readVox(basename: string): ArrayBuffer {
-  return toArrayBuffer(fs.readFileSync(path.join(__dirname, basename)));
+  return toArrayBuffer(fs.readFileSync(path.join(__dirname, '../../public/ref-models', basename)));
 }
 
 function toArrayBuffer(orig: Buffer): ArrayBuffer {
