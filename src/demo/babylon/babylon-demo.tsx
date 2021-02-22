@@ -44,7 +44,7 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
   const doReadBlob = async (blob: Blob) => {
     const bytes = await binaryConversion.blob.toArrayBuffer(blob);
     const parsed = basicParser(bytes);
-    if (parsed.models.length === 1) {
+    if (parsed.models.length >= 1) {
       props.onModelRead?.(parsed);
     } else {
       console.error('cannot read model', bytes, parsed);

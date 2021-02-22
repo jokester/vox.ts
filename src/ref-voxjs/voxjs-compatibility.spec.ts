@@ -1,4 +1,4 @@
-import { chrFoxVox } from '../ref-models/ref-models';
+import { chrFoxVox } from '../__test__/ref-models';
 import { parseBuffer as voxjsParseBuffer } from './voxjs-promised';
 import { basicParser } from '../parser/basic-parser';
 

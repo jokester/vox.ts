@@ -48,7 +48,7 @@ export function useBabylonContext(canvasRef: RefObject<HTMLCanvasElement>): null
   return ctx;
 }
 
-export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean) {
+export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean): void {
   useEffect(() => {
     let effective = true;
     setTimeout(async () => {
@@ -67,7 +67,7 @@ export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean
   }, [ctx, enabled]);
 }
 
-export function useBabylonDepsPreload() {
+export function useBabylonDepsPreload(): void {
   useEffect(() => {
     setTimeout(async () => {
       import('./deps/babylon-deps');
@@ -94,7 +94,7 @@ function initBabylon(canvas: HTMLCanvasElement, deps: typeof babylonAllDeps): Ba
     Vector3.Zero(),
     scene,
   );
-  camera.attachControl(canvas, true);
+  camera.attachControl(canvas, false);
 
   const light = new HemisphericLight('light1', new Vector3(0, 1, 0), scene);
   light.specular = Color3.Black();

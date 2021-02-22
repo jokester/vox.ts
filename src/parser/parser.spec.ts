@@ -1,4 +1,4 @@
-import { chrFoxVox, deerVox, monu8Vox } from '../ref-models/ref-models';
+import { chrFoxVox, deerVox, monu8Vox } from '../__test__/ref-models';
 import { RiffLense } from '../util/riff-lense';
 import { basicParser } from './basic-parser';
 
