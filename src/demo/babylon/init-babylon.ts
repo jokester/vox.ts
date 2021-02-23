@@ -3,7 +3,7 @@ import type { Engine } from '@babylonjs/core/Engines';
 import { RefObject, useEffect, useState } from 'react';
 import type { babylonAllDeps } from './deps/babylon-deps';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
-import { Deferred } from '@jokester/ts-commonutil/lib/concurrency/deferred';
+import { Deferred } from '@jokester/ts-commonutil/cjs/concurrency/deferred';
 
 /**
  * a object to control camera/scene/stuff
