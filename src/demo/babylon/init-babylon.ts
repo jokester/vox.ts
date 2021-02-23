@@ -3,6 +3,7 @@ import type { Engine } from '@babylonjs/core/Engines';
 import { RefObject, useEffect, useState } from 'react';
 import type { babylonAllDeps } from './deps/babylon-deps';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
+import { Deferred } from '@jokester/ts-commonutil/lib/concurrency/deferred';
 
 /**
  * a object to control camera/scene/stuff
@@ -11,6 +12,7 @@ export interface BabylonContext {
   engine: {
     instance: Engine;
     start(): void;
+    stop(): void;
   };
   scene: Scene;
   camera: {
@@ -33,15 +35,19 @@ export function useBabylonContext(canvasRef: RefObject<HTMLCanvasElement>): null
     }
 
     let effective = true;
+    const effectReleased = new Deferred();
 
     import('./deps/babylon-deps').then(async (imported) => {
       if (!effective) return;
       const ctx = initBabylon(maybeCanvas, imported.babylonAllDeps);
       setCtx(ctx);
+
+      effectReleased.then(() => ctx.disposeAll());
     });
 
     return () => {
       effective = false;
+      effectReleased.fulfill(0);
     };
   }, []);
 
@@ -106,6 +112,9 @@ function initBabylon(canvas: HTMLCanvasElement, deps: typeof babylonAllDeps): Ba
 
       start() {
         engine.runRenderLoop(() => scene.render());
+      },
+      stop() {
+        engine.stopRenderLoop();
       },
     },
     scene,

@@ -119,17 +119,22 @@ const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }
       return;
     }
     started.current = true;
+    let effectRunning = true;
 
-    createRefAxes(20, babylonCtx.scene, babylonCtx.deps);
+    // fixme: should re-init scene when model changes
+    createRefAxes(100, babylonCtx.scene, babylonCtx.deps);
+    babylonCtx.engine.start();
+
     if (props.model && props.model.models.length) {
-      renderModel(babylonCtx, props.model.models[0], props.model)
-        //
-        .then(babylonCtx.engine.start);
+      renderModel(babylonCtx, props.model.models[0], props.model, () => !effectRunning);
     } else {
       babylonCtx.camera.setRadius(50);
       renderPlayground(babylonCtx);
-      babylonCtx.engine.start();
     }
+    return () => {
+      babylonCtx.engine.stop();
+      effectRunning = false;
+    };
   }, [babylonCtx, props.model]);
 
   const [enableInspector, setEnableInspector] = useState(false);
