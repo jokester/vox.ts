@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ParsedVoxFile } from '../../types/vox-types';
-import { useBabylonContext, useBabylonInspector } from '../../babylon-react/init-babylon';
+import {
+  initArcRotateCamera,
+  initLight,
+  useBabylonContext,
+  useBabylonInspector,
+} from '../../babylon-react/babylon-ctx';
 import classNames from 'classnames';
 import { useMounted } from '../components/hooks/use-mounted';
 import { createRefAxes } from '../../babylon-react/create-ref-axes';
@@ -123,12 +128,18 @@ const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }
 
     // fixme: should re-init scene when model changes
     createRefAxes(100, babylonCtx.scene, babylonCtx.deps);
+
+    const camera = initArcRotateCamera(babylonCtx);
+    initLight(babylonCtx);
     babylonCtx.engine.start();
 
     if (props.model && props.model.models.length) {
-      renderModel(babylonCtx, props.model.models[0], props.model, () => !effectRunning);
+      const firstModel = props.model.models[0];
+      camera.lowerRadiusLimit = Math.max(2 * firstModel.size.x, 2 * firstModel.size.y, 2 * firstModel.size.z);
+
+      renderModel(babylonCtx, firstModel, props.model, () => !effectRunning);
     } else {
-      babylonCtx.camera.setRadius(50);
+      camera.lowerRadiusLimit = 10;
       renderPlayground(babylonCtx);
     }
     return () => {

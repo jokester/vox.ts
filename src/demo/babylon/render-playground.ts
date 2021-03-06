@@ -1,4 +1,4 @@
-import { BabylonContext } from '../../babylon-react/init-babylon';
+import { BabylonContext } from '../../babylon-react/babylon-ctx';
 
 export function renderPlayground(ctx: BabylonContext): void {
   const { Color4, MeshBuilder, Vector3 } = ctx.deps;
