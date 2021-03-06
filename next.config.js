@@ -1,11 +1,7 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
-const withPlugins = require('next-compose-plugins');
+const { withPlugins, optional } = require('next-compose-plugins');
 
-const webpack = require('webpack');
-const withSourceMap = require('@zeit/next-source-maps');
-const optimizedImages = require('next-optimized-images');
-const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
-const withTM = require('next-transpile-modules');
+const { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } = require('next/constants');
 
 const nextConf = {
   analyzeServer: ['server', 'both'].includes(process.env.BUNDLE_ANALYZE),
@@ -31,10 +27,12 @@ const nextConf = {
 
   // see https://nextjs.org/docs/#customizing-webpack-config
   webpack(config, { buildId, dev, isServer }) {
+    const webpack = require('webpack');
     config.plugins.push(
       new webpack.DefinePlugin({
         // becomes process.env.NEXT_DEV : boolean
         'process.env.NEXT_DEV': JSON.stringify(!!dev),
+        'process.env.NEXT_SERVER': JSON.stringify(!!isServer),
       }),
     );
 
@@ -54,12 +52,18 @@ const nextConf = {
 
 module.exports = withPlugins(
   [
-    [optimizedImages, { optimizeImages: false }],
-    [withBundleAnalyzer],
-    // [withSourceMap],  // this does not work
-    withTM([
+    [optional(() => require('next-optimized-images')), { optimizeImages: false }, [PHASE_PRODUCTION_BUILD]],
+    [optional(() => require('@zeit/next-bundle-analyzer')), {}, [PHASE_PRODUCTION_BUILD]],
+    [optional(() => require('@zeit/next-source-maps')), {}, [PHASE_PRODUCTION_BUILD]],
+    [
+      optional(() =>
+        require('next-transpile-modules')([
       /* ES modules used in server code */
     ]),
+      ),
+      {},
+      [PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD],
+    ],
   ],
-  withSourceMap(nextConf),
+  nextConf,
 );
