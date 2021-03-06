@@ -7,6 +7,7 @@ import { Mesh, MeshBuilder, TransformNode } from '@babylonjs/core/Meshes';
 import { DynamicTexture, StandardMaterial } from '@babylonjs/core/Materials';
 
 import { BabylonDeps as MeshBuilderDeps } from '../babylon/babylon-deps';
+import { SceneLoader, Tools } from '@babylonjs/core';
 
 export const babylonMeshDeps: MeshBuilderDeps = {
   Mesh,
@@ -28,4 +29,6 @@ export const babylonAllDeps = {
   Vector3,
   Color3,
   DynamicTexture,
+  SceneLoader,
+  Tools,
 } as const;

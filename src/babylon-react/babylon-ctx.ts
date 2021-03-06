@@ -120,21 +120,28 @@ function createBabylonCtx(canvas: HTMLCanvasElement, deps: typeof babylonAllDeps
       instance: engine,
 
       start() {
-        engine.runRenderLoop(() => scene.render());
+        engine.runRenderLoop(() => engine.scenes.forEach((s) => s.render()));
       },
       stop() {
         engine.stopRenderLoop();
       },
     },
     scene,
-    disposeAll() {
+    disposeAll: function () {
       engine.stopRenderLoop();
       scene.cameras.forEach((camera) => {
         camera.detachControl(canvas);
         camera.dispose();
       });
 
-      scene.dispose();
+      engine.scenes.forEach((s) => {
+        s.cameras.forEach((c) => {
+          c.detachControl();
+          c.dispose();
+        });
+        s.dispose();
+      });
+
       engine.dispose();
     },
     deps,

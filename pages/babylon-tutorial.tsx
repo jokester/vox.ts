@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { DefaultMeta } from '../src/demo/components/default-meta';
 
 const BabylonTutorialPage: FC = () => (
-  <div className="bg-white p-4">
+  <div className="bg-white">
     <DefaultMeta />
     <BabylonTutorial />
   </div>
