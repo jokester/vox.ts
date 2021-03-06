@@ -6,7 +6,7 @@ import { Vector3, Color3, Color4, Matrix, Quaternion } from '@babylonjs/core/Mat
 import { Mesh, MeshBuilder, TransformNode } from '@babylonjs/core/Meshes';
 import { DynamicTexture, StandardMaterial } from '@babylonjs/core/Materials';
 
-import { BabylonDeps as MeshBuilderDeps } from '../../../babylon/babylon-deps';
+import { BabylonDeps as MeshBuilderDeps } from '../babylon/babylon-deps';
 
 export const babylonMeshDeps: MeshBuilderDeps = {
   Mesh,

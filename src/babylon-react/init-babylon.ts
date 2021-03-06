@@ -1,7 +1,7 @@
 import type { Scene } from '@babylonjs/core/scene';
 import type { Engine } from '@babylonjs/core/Engines';
 import { RefObject, useEffect, useState } from 'react';
-import type { babylonAllDeps } from './deps/babylon-deps';
+import type { babylonAllDeps } from './babylon-deps';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { Deferred } from '@jokester/ts-commonutil/cjs/concurrency/deferred';
 
@@ -37,7 +37,7 @@ export function useBabylonContext(canvasRef: RefObject<HTMLCanvasElement>): null
     let effective = true;
     const effectReleased = new Deferred();
 
-    import('./deps/babylon-deps').then(async (imported) => {
+    import('./babylon-deps').then(async (imported) => {
       if (!effective) return;
       const ctx = initBabylon(maybeCanvas, imported.babylonAllDeps);
       setCtx(ctx);
@@ -58,7 +58,7 @@ export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean
   useEffect(() => {
     let effective = true;
     setTimeout(async () => {
-      await import('./deps/babylon-deps-inspector');
+      await import('./babylon-deps-inspector');
       if (effective && ctx) {
         if (enabled) {
           await ctx.scene.debugLayer.show();
@@ -76,8 +76,8 @@ export function useBabylonInspector(ctx: null | BabylonContext, enabled: boolean
 export function useBabylonDepsPreload(): void {
   useEffect(() => {
     setTimeout(async () => {
-      import('./deps/babylon-deps');
-      import('./deps/babylon-deps-inspector');
+      import('./babylon-deps');
+      import('./babylon-deps-inspector');
     });
   }, []);
 }

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 import React from 'react';
-import { useBabylonDepsPreload } from '../babylon/init-babylon';
+import { useBabylonDepsPreload } from '../../babylon-react/init-babylon';
 
 export const DefaultMeta: React.FC = () => {
   useBabylonDepsPreload();

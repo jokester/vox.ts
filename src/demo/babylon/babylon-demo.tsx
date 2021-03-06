@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ParsedVoxFile } from '../../types/vox-types';
-import { useBabylonContext, useBabylonInspector } from './init-babylon';
+import { useBabylonContext, useBabylonInspector } from '../../babylon-react/init-babylon';
 import classNames from 'classnames';
 import { useMounted } from '../components/hooks/use-mounted';
-import { createRefAxes } from './deps/create-ref-axes';
+import { createRefAxes } from '../../babylon-react/create-ref-axes';
 import { renderPlayground } from './render-playground';
 import { binaryConversion } from '../../util/binary-conversion';
 import { basicParser } from '../../parser/basic-parser';

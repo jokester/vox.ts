@@ -1,4 +1,4 @@
-import { BabylonContext } from './init-babylon';
+import { BabylonContext } from '../../babylon-react/init-babylon';
 import { ParsedVoxFile, VoxelModel } from '../../types/vox-types';
 import { BabylonMeshBuilder } from '../../babylon/babylon-mesh-builder';
 import { wait } from '../../util/timing';
