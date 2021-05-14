@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ParsedVoxFile } from '../../types/vox-types';
+import { ParsedVoxFile, VoxelModel } from '../../types/vox-types';
 import {
   initArcRotateCamera,
   initLight,
@@ -9,32 +9,56 @@ import {
 import classNames from 'classnames';
 import { useMounted } from '../components/hooks/use-mounted';
 import { createRefAxes } from '../../babylon-react/create-ref-axes';
-import { renderPlayground } from './render-playground';
 import { binaryConversion } from '../../util/binary-conversion';
 import { basicParser } from '../../parser/basic-parser';
 import { renderModel } from './render-vox-model';
 
 export const BabylonDemo: React.FC = () => {
-  const [model, setModel] = useState<null | ParsedVoxFile>(null);
+  const [selected, setSelected] = useState<null | { modelIndex: number; voxFile: ParsedVoxFile }>(null);
 
-  if (model) {
+  const onFileRead = (parsed: ParsedVoxFile) => {
+    if (parsed.models.length < 1) {
+      console.error('cannot read model', parsed);
+    } else {
+      setSelected({ modelIndex: 0, voxFile: parsed });
+    }
+  };
+
+  if (selected) {
     return (
       <div className="p-4">
         <h1 className="mb-2 text-xl">model viewer</h1>
-        <BabylonModelRenderer model={model} onReset={() => setModel(null)} />;
+        <BabylonModelRenderer
+          key={selected.modelIndex}
+          model={selected.voxFile.models[selected.modelIndex]}
+          voxFile={selected.voxFile}
+          onReset={() => setSelected(null)}
+        />
+        <hr className="py-1" />
+        <div className="space-x-2">
+          {selected.voxFile.models.map((model, i) => (
+            <button
+              key={i}
+              onClick={() => setSelected({ ...selected, modelIndex: i })}
+              className="p-2 border-white border"
+            >
+              render model #{i}
+            </button>
+          ))}
+        </div>
       </div>
     );
   } else {
     return (
       <div className="p-4">
         <h1 className="mb-2 text-xl">pick a vox file</h1>
-        <BabylonFilePicker onModelRead={setModel} />
+        <BabylonFilePicker onFileRead={onFileRead} />
       </div>
     );
   }
 };
 
-const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = (props) => {
+const BabylonFilePicker: React.FC<{ onFileRead?(got: ParsedVoxFile): void }> = (props) => {
   const [reading, setReading] = useState(false);
   const mounted = useMounted();
 
@@ -49,11 +73,7 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
   const doReadBlob = async (blob: Blob) => {
     const bytes = await binaryConversion.blob.toArrayBuffer(blob);
     const parsed = basicParser(bytes);
-    if (parsed.models.length >= 1) {
-      props.onModelRead?.(parsed);
-    } else {
-      console.error('cannot read model', bytes, parsed);
-    }
+    props.onFileRead?.(parsed);
   };
 
   const onFileSelected = async (f: File) => {
@@ -111,7 +131,7 @@ const BabylonFilePicker: React.FC<{ onModelRead?(got: ParsedVoxFile): void }> = 
   );
 };
 
-const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }> = (props) => {
+const BabylonModelRenderer: React.FC<{ onReset?(): void; model: VoxelModel; voxFile: ParsedVoxFile }> = (props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const babylonCtx = useBabylonContext(canvasRef);
 
@@ -133,20 +153,13 @@ const BabylonModelRenderer: React.FC<{ onReset?(): void; model?: ParsedVoxFile }
     initLight(babylonCtx);
     babylonCtx.engine.start();
 
-    if (props.model && props.model.models.length) {
-      const firstModel = props.model.models[0];
-      camera.lowerRadiusLimit = Math.max(2 * firstModel.size.x, 2 * firstModel.size.y, 2 * firstModel.size.z);
-
-      renderModel(babylonCtx, firstModel, props.model, () => !effectRunning);
-    } else {
-      camera.lowerRadiusLimit = 10;
-      renderPlayground(babylonCtx);
-    }
+    camera.lowerRadiusLimit = Math.max(2 * props.model.size.x, 2 * props.model.size.y, 2 * props.model.size.z);
+    renderModel(babylonCtx, props.model, props.voxFile, () => !effectRunning);
     return () => {
       babylonCtx.engine.stop();
       effectRunning = false;
     };
-  }, [babylonCtx, props.model]);
+  }, [babylonCtx, props.model, props.voxFile]);
 
   const [enableInspector, setEnableInspector] = useState(false);
   useBabylonInspector(babylonCtx, enableInspector);

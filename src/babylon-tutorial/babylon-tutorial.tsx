@@ -70,5 +70,4 @@ async function runTutorial_2_build_a_village({ canvas, scene, engine, deps }: Ba
    * @type {Mesh}
    */
   const ground = MeshBuilder.CreateGround('ground', { width: 10, height: 10 });
-  Tools.T;
 }
