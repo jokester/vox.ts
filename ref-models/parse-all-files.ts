@@ -57,6 +57,8 @@ async function main() {
     }
   }
 
+  outLines.sort((a, b) => a.numBytes - b.numBytes);
+
   await fsp.writeFile(path.join(__dirname, 'vox-files.json'), JSON.stringify(outLines, null, 2));
 }
 
