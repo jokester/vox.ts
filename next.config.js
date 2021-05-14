@@ -63,6 +63,7 @@ module.exports = withPlugins(
       optional(() =>
         require('next-transpile-modules')([
           /* ES modules used in server code */
+          '@babylonjs/core',
         ]),
       ),
       {},

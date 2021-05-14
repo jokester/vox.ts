@@ -13,6 +13,6 @@ const CustomApp: React.FC<AppProps> & Partial<Pick<typeof App, 'getInitialProps'
   );
 };
 
-CustomApp.getInitialProps = App.getInitialProps;
+// CustomApp.getInitialProps = App.getInitialProps;
 
 export default CustomApp;
