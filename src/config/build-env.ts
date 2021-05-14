@@ -5,5 +5,6 @@ declare const process: {
 };
 
 export const inBrowser = typeof window !== 'undefined';
+export const inServer = !inBrowser;
 
 export const isDevBuild = process.env.NODE_ENV !== 'production';

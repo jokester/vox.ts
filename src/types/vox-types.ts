@@ -34,7 +34,7 @@ export enum VoxelMaterialType {
 }
 
 /**
- * see https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt
+ * @see https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt
  * (TODO: how are they referenced / used ?)
  */
 export interface VoxelMaterial {
