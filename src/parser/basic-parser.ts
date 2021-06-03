@@ -2,6 +2,20 @@ import * as VoxTypes from '../types/vox-types';
 import { Chunk, RiffLense } from '../util/riff-lense';
 import { defaultPaletteBytes } from './default-palette';
 
+export function chunksParser(bytes: ArrayBuffer): Chunk[] {
+  const l = new RiffLense(bytes);
+
+  const mainChunk = l.chunkAt(8);
+
+  const found: Chunk[] = [mainChunk];
+
+  const childChunks = l.childrenChunksIn(mainChunk);
+
+  found.push(...childChunks);
+
+  return found;
+}
+
 export function basicParser(bytes: ArrayBuffer, flipYZ = false): VoxTypes.ParsedVoxFile {
   const l = new RiffLense(bytes);
 
@@ -16,6 +30,7 @@ export function basicParser(bytes: ArrayBuffer, flipYZ = false): VoxTypes.Parsed
   const models: VoxTypes.VoxelModel[] = [];
   const palette: VoxTypes.VoxelColor[] = [];
   const materials: VoxTypes.VoxelMaterial[] = [];
+  const warnings: string[] = [];
   for (let chunkIndex = 0; chunkIndex < mainChildren.length; ++chunkIndex) {
     const chunk = mainChildren[chunkIndex];
     if (chunk.id === 'PACK' && chunkIndex === 0) {
@@ -37,9 +52,10 @@ export function basicParser(bytes: ArrayBuffer, flipYZ = false): VoxTypes.Parsed
         case 'nGRP':
         case 'nSHP':
         case 'LAYR':
-        case 'MATL':
         case 'rOBJ':
+        case 'MATL':
           // TODO: support extension chunks
+          warnings.push(`unsupported '${chunk.id}' chunk at offset=0x${chunk.start.toString(16)}`);
           break;
 
         default:
@@ -56,6 +72,7 @@ export function basicParser(bytes: ArrayBuffer, flipYZ = false): VoxTypes.Parsed
     models,
     palette,
     materials,
+    warnings,
   };
 }
 

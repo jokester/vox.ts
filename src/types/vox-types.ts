@@ -53,4 +53,5 @@ export interface ParsedVoxFile {
   readonly models: readonly VoxelModel[];
   readonly palette: VoxelPalette;
   readonly materials: readonly VoxelMaterial[];
+  readonly warnings: string[];
 }

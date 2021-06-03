@@ -1,9 +1,10 @@
 import path from 'path';
 import { Dirent } from 'fs';
 import { fsp } from '@jokester/ts-commonutil/cjs/node';
-import { basicParser } from '../src/parser/basic-parser';
+import { basicParser, chunksParser } from '../src/parser/basic-parser';
 import { VoxelModelSize } from '../src/types/vox-types';
 import lodash from 'lodash';
+import { Chunk } from '../src/util/riff-lense';
 
 async function* dfsDirectory(start: string): AsyncGenerator<{ path: string; entry: Dirent }> {
   const queue = [start];
@@ -30,6 +31,7 @@ async function main() {
     error?: string;
     models?: { numVoxels: number; size: VoxelModelSize }[];
     materials?: { materialType: number; modelPropertyBits: string }[];
+    chunks?: Chunk[];
   }[] = [];
   for await (const maybeFile of dfsDirectory(path.join(__dirname, 'models'))) {
     if (maybeFile.entry.isFile() && /\.vox$/i.test(maybeFile.path)) {
@@ -44,6 +46,7 @@ async function main() {
             materialType: m.type,
             modelPropertyBits: '0b' + lodash.padStart(m.propertyBits.toString(2), 8, '0'),
           })),
+          chunks: chunksParser(bytes.buffer),
         });
         console.debug('parsed file', maybeFile.path, bytes.length);
       } catch (e) {
