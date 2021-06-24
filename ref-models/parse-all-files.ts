@@ -1,6 +1,5 @@
 import path from 'path';
-import { Dirent } from 'fs';
-import { fsp } from '@jokester/ts-commonutil/cjs/node';
+import { Dirent, promises as fsp } from 'fs';
 import { basicParser, chunksParser } from '../src/parser/basic-parser';
 import { VoxelModelSize } from '../src/types/vox-types';
 import lodash from 'lodash';
@@ -13,7 +12,7 @@ async function* dfsDirectory(start: string): AsyncGenerator<{ path: string; entr
     const p = queue.shift()!;
     const f = await fsp.stat(p);
     if (f.isDirectory()) {
-      for (const child of await fsp.readDir(p, { withFileTypes: true })) {
+      for (const child of await fsp.readdir(p, { withFileTypes: true })) {
         yield { path: path.join(p, child.name), entry: child };
 
         if (child.isDirectory()) {

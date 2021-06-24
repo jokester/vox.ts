@@ -3,7 +3,7 @@ import type { Engine } from '@babylonjs/core/Engines';
 import { RefObject, useEffect, useState } from 'react';
 import type { babylonAllDeps } from './babylon-deps';
 import type { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
-import { Deferred } from '@jokester/ts-commonutil/cjs/concurrency/deferred';
+import { Deferred } from '@jokester/ts-commonutil/lib/concurrency/deferred';
 import type { HemisphericLight } from '@babylonjs/core/Lights';
 
 /**
